@@ -1,0 +1,108 @@
+====================================================
+RUTINA RÁPIDA PARA APRENDER SCRIPTING CON NMAP (NSE)
+====================================================
+
+Nota importante:
+Practica siempre en entornos controlados y autorizados (tu propia red,
+máquinas virtuales, o plataformas legales como TryHackMe, HackTheBox,
+o metasploitable). Escanear sistemas sin permiso es ilegal en la
+mayoría de países.
+
+----------------------------------------------------
+SEMANA 1 — FUNDAMENTOS DE NMAP
+----------------------------------------------------
+1. Instala Nmap:
+   sudo apt install nmap
+
+2. Aprende comandos básicos:
+   nmap -sV <ip>          -> detecta versiones de servicios
+   nmap -sS <ip>          -> escaneo TCP SYN (sigiloso)
+   nmap -O <ip>           -> detección de sistema operativo
+   nmap -p 1-65535 <ip>   -> escanea todos los puertos
+   nmap -A <ip>           -> escaneo agresivo (SO, versiones, scripts)
+
+3. Practica contra "scanme.nmap.org" (host oficial de prueba de
+   Nmap, autorizado para pruebas):
+   nmap -sV scanme.nmap.org
+
+----------------------------------------------------
+SEMANA 2 — INTRODUCCIÓN A NSE (Nmap Scripting Engine)
+----------------------------------------------------
+1. Entiende qué es NSE:
+   Es un motor que permite ejecutar scripts en Lua para automatizar
+   tareas: detección de vulnerabilidades, enumeración, fuerza bruta,
+   descubrimiento de red, etc.
+
+2. Ubicación de los scripts ya incluidos en tu sistema:
+   /usr/share/nmap/scripts/
+
+3. Categorías principales de scripts NSE:
+   - auth        -> autenticación
+   - broadcast   -> descubrimiento en red local
+   - default     -> scripts seguros ejecutados con -sC
+   - discovery   -> descubrimiento de servicios/hosts
+   - dos         -> pruebas de denegación de servicio (cuidado)
+   - exploit     -> explotación de vulnerabilidades conocidas
+   - safe        -> scripts que no afectan al objetivo
+   - vuln        -> detección de vulnerabilidades
+
+4. Comandos para usar scripts existentes:
+   nmap -sC <ip>                       -> scripts por defecto
+   nmap --script=vuln <ip>             -> detección de vulnerabilidades
+   nmap --script=safe <ip>             -> solo scripts seguros
+   nmap --script=http-title <ip>       -> ejemplo de script específico
+   nmap --script-help=<nombre>         -> ver ayuda de un script
+
+5. Lista todos los scripts disponibles:
+   ls /usr/share/nmap/scripts/ | less
+
+----------------------------------------------------
+SEMANA 3 — APRENDE A LEER SCRIPTS (Lua)
+----------------------------------------------------
+1. Aprende lo básico de Lua (el lenguaje de NSE):
+   - Variables, tablas, funciones, condicionales.
+   - Recursos: "Lua Crash Course" (búscalo en YouTube o docs.lua.org)
+
+2. Abre y analiza un script sencillo, por ejemplo:
+   cat /usr/share/nmap/scripts/http-title.nse
+
+3. Estructura típica de un script NSE:
+   - description   -> qué hace el script
+   - categories    -> a qué categoría pertenece
+   - portrule/hostrule -> cuándo se ejecuta
+   - action()      -> la lógica principal
+
+4. Estudia 2-3 scripts "safe" y "discovery" por día para entender
+   patrones comunes (cómo hacen conexiones, cómo parsean respuestas).
+
+----------------------------------------------------
+SEMANA 4 — ESCRIBE TU PROPIO SCRIPT BÁSICO
+----------------------------------------------------
+1. Sigue la documentación oficial (la mejor fuente):
+   https://nmap.org/book/nse-tutorial.html
+   https://nmap.org/book/nse-api.html
+
+2. Crea un script simple que:
+   - Detecte si un puerto está abierto (portrule)
+   - Imprima un mensaje simple (action)
+
+3. Pruébalo así:
+   nmap --script=/ruta/a/tuscript.nse <ip>
+
+4. Valida sintaxis:
+   nmap --script-updatedb
+
+----------------------------------------------------
+RECURSOS RECOMENDADOS
+----------------------------------------------------
+- Documentación oficial: https://nmap.org/book/man.html
+- NSE Doc oficial: https://nmap.org/nsedoc/
+- Libro: "Nmap Network Scanning" de Gordon Lyon (creador de Nmap)
+- Laboratorios legales: TryHackMe (sala "Nmap"), HackTheBox Academy
+
+----------------------------------------------------
+SIGUIENTE PASO SUGERIDO
+----------------------------------------------------
+Una vez domines NSE, puedes combinar Nmap con Metasploit
+(ver archivo metasploit_intro.txt) para pasar de "detectar"
+a "entender cómo se validan" vulnerabilidades en labs autorizados.
